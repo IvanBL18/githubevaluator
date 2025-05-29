@@ -1,124 +1,323 @@
-    <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Sample Test Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Evaluador de Derechos Laborales</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+    rel="stylesheet"
+  />
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f4f4f4;
+    .semaforo-luz {
+      width: 60px;
+      height: 60px;
+      border-radius: 9999px;
     }
-    header, footer {
-      background-color: #333;
-      color: white;
-      padding: 15px;
-      text-align: center;
+    .semaforo-caja {
+      background-color: #1f2937;
+      border-radius: 1rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 100px;
+      margin: auto;
     }
-    section {
-      margin-bottom: 40px;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
+    .oculto {
+      display: none;
     }
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    table, td, th {
-      border: 1px solid #999;
-    }
-    th, td {
-      padding: 10px;
+    .derecho-faltante {
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
       text-align: left;
+    }
+    .derecho-faltante:hover {
+      transform: scale(1.05);
     }
   </style>
 </head>
-<body>
-
-  <header>
-    <h1>My Test Page</h1>
-    <p>This is a basic test layout</p>
+<body
+  class="bg-gradient-to-br from-green-50 to-blue-100 min-h-screen flex flex-col justify-between text-gray-800"
+>
+  <header
+    class="bg-green-700 text-white py-4 shadow-md text-center"
+  >
+    <h1 class="text-2xl md:text-4xl font-bold">
+      Evaluador de Derechos Laborales
+    </h1>
+    <p class="text-sm md:text-base animate-pulse">
+      ¿Tu empleo cumple con la ley? ¡Averígualo aquí!
+    </p>
   </header>
 
-  <section>
-    <h2>About This Page</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel urna at velit hendrerit accumsan.</p>
-    <p>Morbi in augue sit amet metus fermentum venenatis at ut magna. Pellentesque habitant morbi tristique senectus et netus.</p>
-  </section>
+  <main class="p-6 max-w-6xl mx-auto flex-grow">
+    <div id="contenedorPreguntas">
+      <h2
+        class="text-xl font-semibold mb-4 text-center"
+      >
+        Selecciona los derechos que se cumplen en tu trabajo:
+      </h2>
+      <form
+        id="formDerechos"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+      ></form>
+      <div class="mt-6 text-center">
+        <button
+          type="button"
+          onclick="evaluar()"
+          class="bg-green-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-green-700 transition transform hover:scale-105"
+        >
+          Evaluar
+        </button>
+      </div>
+    </div>
 
-  <section>
-    <h2>Image Section</h2>
-    <img src="https://via.placeholder.com/600x200" alt="Placeholder Image">
-  </section>
+    <div
+      id="resultadoFinal"
+      class="oculto mt-10 text-center animate-fade-in"
+    >
+      <div class="semaforo-caja mb-6">
+        <div
+          id="luz-roja"
+          class="semaforo-luz bg-gray-400 transition duration-500"
+        ></div>
+        <div
+          id="luz-amarilla"
+          class="semaforo-luz bg-gray-400 transition duration-500"
+        ></div>
+        <div
+          id="luz-verde"
+          class="semaforo-luz bg-gray-400 transition duration-500"
+        ></div>
+      </div>
+      <lottie-player
+        id="lottieAnim"
+        src=""
+        background="transparent"
+        speed="1"
+        style="width: 250px; height: 250px; margin: auto;"
+        loop
+        autoplay
+      ></lottie-player>
+      <h2
+        id="resultado"
+        class="text-2xl font-bold mt-4"
+      ></h2>
 
-  <section>
-    <h2>List of Items</h2>
-    <ul>
-      <li>Item One</li>
-      <li>Item Two</li>
-      <li>Item Three</li>
-    </ul>
-    <ol>
-      <li>First Step</li>
-      <li>Second Step</li>
-      <li>Third Step</li>
-    </ol>
-  </section>
+      <div id="panelDerechosFaltantes" class="mt-6 text-left">
+        <h3 class="text-xl font-semibold mb-4">
+          Derechos que faltan cumplir:
+        </h3>
+      </div>
 
-  <section>
-    <h2>Sample Table</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Occupation</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Alice</td>
-          <td>30</td>
-          <td>Developer</td>
-        </tr>
-        <tr>
-          <td>Bob</td>
-          <td>25</td>
-          <td>Designer</td>
-        </tr>
-        <tr>
-          <td>Charlie</td>
-          <td>28</td>
-          <td>Manager</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+      <button
+        onclick="reiniciar()"
+        class="mt-6 bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700 transition"
+      >
+        Volver a evaluar
+      </button>
+    </div>
+  </main>
 
-  <section>
-    <h2>Contact Form</h2>
-    <form>
-      <label for="name">Name:</label><br>
-      <input type="text" id="name" name="name"><br><br>
-      
-      <label for="email">Email:</label><br>
-      <input type="email" id="email" name="email"><br><br>
-      
-      <label for="message">Message:</label><br>
-      <textarea id="message" name="message" rows="5" cols="30"></textarea><br><br>
-      
-      <button type="submit">Send</button>
-    </form>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 Sample Page | All rights reserved</p>
+  <footer
+    class="bg-gray-800 text-white py-4 text-center"
+  >
+    <p>&copy; 2025 Derechos Laborales Colombia | Diseñado con ❤️</p>
   </footer>
 
+  <script>
+    const derechos = [
+      {
+        derecho: "Contrato de trabajo formal",
+        url: "https://leyes.co/codigo_sustantivo_del_trabajo/23.htm",
+      },
+      {
+        derecho: "Afiliación a salud (EPS)",
+        url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=5248",
+      },
+      {
+        derecho: "Afiliación a pensión",
+        url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=5248",
+      },
+      {
+        derecho: "Afiliación a ARL",
+        url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=2629",
+      },
+      {
+        derecho: "Caja de compensación",
+        url: "https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=4827",
+      },
+      {
+        derecho: "Pago justo y puntual",
+        url: "https://leyes.co/codigo_sustantivo_del_trabajo/127.htm",
+      },
+      {
+        derecho: "Jornada laboral legal (máx. 42 h/semana)",
+        url: "https://leyes.co/codigo_sustantivo_del_trabajo/161.htm",
+      },
+      {
+        derecho: "Pago de horas extras y recargos",
+        url: "https://leyes.co/codigo_sustantivo_del_trabajo/168.htm",
+      },
+      {
+        derecho: "Vacaciones anuales",
+        url: "https://leyes.co/codigo_sustantivo_del_trabajo/186.htm",
+      },
+      {
+        derecho: "Cesantías",
+        url: "https://leyes.co/codigo_sustantivo_del_trabajo/249.htm",
+      },
+      {
+        derecho: "Intereses sobre cesantías",
+        url: "https://leyes.co/codigo_sustantivo_del_trabajo/251.htm",
+      },
+      {
+        derecho: "Prima de servicios",
+        url: "https://leyes.co/codigo_sustantivo_del_trabajo/306.htm",
+      },
+      {
+        derecho: "Licencia de maternidad o paternidad",
+        url: "https://leyes.co/codigo_sustantivo_del_trabajo/236.htm",
+      },
+      {
+        derecho: "Incapacidad médica cubierta",
+        url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=5248",
+      },
+      {
+        derecho: "Dotación de ropa y calzado",
+        url: "https://leyes.co/codigo_sustantivo_del_trabajo/230.htm",
+      },
+      {
+        derecho: "Estabilidad laboral o indemnización",
+        url: "https://leyes.co/codigo_sustantivo_del_trabajo/64.htm",
+      },
+      {
+        derecho: "Ambiente laboral libre de acoso",
+        url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=19318",
+      },
+      {
+        derecho: "Derecho a sindicalizarse",
+        url: "https://www.constitucioncolombia.com/titulo-3/capitulo-1/articulo-39",
+      },
+      {
+        derecho: "Certificado laboral al salir",
+        url: "https://leyes.co/codigo_sustantivo_del_trabajo/65.htm",
+      },
+      {
+        derecho: "Desprendible de nómina",
+        url: "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=40150",
+      },
+    ];
+
+    const form = document.getElementById("formDerechos");
+
+    derechos.forEach((d, i) => {
+      const div = document.createElement("div");
+      div.className =
+        "bg-white p-4 rounded-xl shadow hover:shadow-lg transition transform hover:scale-105";
+
+      const label = document.createElement("label");
+      label.className = "inline-flex items-center gap-3 cursor-pointer select-none";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.id = `checkbox-${i}`;
+      checkbox.name = `checkbox-${i}`;
+      checkbox.className = "form-checkbox text-green-600 w-5 h-5";
+
+      const texto = document.createElement("span");
+      texto.textContent = d.derecho;
+      texto.className = "text-sm font-medium";
+
+      label.appendChild(checkbox);
+      label.appendChild(texto);
+
+      div.appendChild(label);
+      form.appendChild(div);
+    });
+
+    function evaluar() {
+      const respuestas = derechos.map((_, i) => {
+        const checkbox = document.getElementById(`checkbox-${i}`);
+        return checkbox.checked;
+      });
+
+      const panel = document.getElementById("panelDerechosFaltantes");
+      panel.innerHTML =
+        '<h3 class="text-xl font-semibold mb-4">Derechos que faltan cumplir:</h3>';
+
+      const faltantes = derechos.filter((_, i) => !respuestas[i]);
+      faltantes.forEach((f) => {
+        const div = document.createElement("div");
+        div.className = "derecho-faltante";
+        div.innerHTML = `${f.derecho} <br /><a href="${f.url}" target="_blank" class="text-blue-600 underline text-xs">Ver artículo</a>`;
+        panel.appendChild(div);
+      });
+
+      const porcentaje = (respuestas.filter((r) => r).length / derechos.length) * 100;
+
+      document.getElementById("resultadoFinal").classList.remove("oculto");
+
+      if (porcentaje < 50) {
+        document.getElementById("luz-roja").classList.add("bg-red-500");
+        document.getElementById("luz-amarilla").classList.remove("bg-yellow-400");
+        document.getElementById("luz-verde").classList.remove("bg-green-500");
+        document.getElementById("lottieAnim").setAttribute(
+          "src",
+          "https://assets4.lottiefiles.com/packages/lf20_e3gotj.json"
+        );
+        document.getElementById("resultado").textContent =
+          "Hay múltiples derechos laborales sin cumplir.";
+      } else if (porcentaje < 80) {
+        document.getElementById("luz-amarilla").classList.add("bg-yellow-400");
+        document.getElementById("luz-roja").classList.remove("bg-red-500");
+        document.getElementById("luz-verde").classList.remove("bg-green-500");
+        document.getElementById("lottieAnim").setAttribute(
+          "src",
+          "https://assets3.lottiefiles.com/packages/lf20_zrqthn6o.json"
+        );
+        document.getElementById("resultado").textContent =
+          "Tu trabajo cumple parcialmente con los derechos laborales.";
+      } else {
+        document.getElementById("luz-verde").classList.add("bg-green-500");
+        document.getElementById("luz-roja").classList.remove("bg-red-500");
+        document.getElementById("luz-amarilla").classList.remove("bg-yellow-400");
+        document.getElementById("lottieAnim").setAttribute(
+          "src",
+          "https://assets3.lottiefiles.com/packages/lf20_4kx2q32n.json"
+        );
+        document.getElementById("resultado").textContent =
+          "Tu trabajo cumple con la mayoría de los derechos laborales.";
+      }
+
+      // Ocultar formulario y título inicial
+      document.getElementById("contenedorPreguntas").classList.add("oculto");
+    }
+
+    function reiniciar() {
+      derechos.forEach((_, i) => {
+        const checkbox = document.getElementById(`checkbox-${i}`);
+        checkbox.checked = false;
+      });
+
+      document.getElementById("resultadoFinal").classList.add("oculto");
+      document.getElementById("contenedorPreguntas").classList.remove("oculto");
+      document.getElementById("panelDerechosFaltantes").innerHTML = "";
+      document.getElementById("luz-roja").className = "semaforo-luz bg-gray-400 transition duration-500";
+      document.getElementById("luz-amarilla").className = "semaforo-luz bg-gray-400 transition duration-500";
+      document.getElementById("luz-verde").className = "semaforo-luz bg-gray-400 transition duration-500";
+      document.getElementById("resultado").textContent = "";
+      document.getElementById("lottieAnim").setAttribute("src", "");
+    }
+  </script>
 </body>
 </html>
